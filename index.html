@@ -3,11 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>心理人格测试 - Which Character Are You?</title>
-  <meta name="description" content="基于荣格人格理论的免费心理测试">
-  
-  <!-- AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_UNIT" crossorigin="anonymous"></script>
+  <title>心理测试大全 - Personality Quiz Collection</title>
+  <meta name="description" content="热门心理测试、人格测试、性格分析">
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,13 +15,10 @@
       --secondary: #764ba2;
       --bg: #0f0f23;
       --card-bg: #1a1a2e;
+      --card-bg-hover: #252542;
       --text: #ffffff;
       --text-muted: #a0a0b0;
-      --success: #10b981;
-      --type-a: #4a90d9;
-      --type-b: #9b59b6;
-      --type-c: #e74c3c;
-      --type-d: #f39c12;
+      --accent: #f093fb;
     }
     
     body {
@@ -32,194 +26,179 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.6;
     }
     
     .container {
-      max-width: 600px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0 16px;
     }
     
     /* Header */
     header {
-      text-align: center;
-      padding: 30px 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     
     header h1 {
-      font-size: 1.8rem;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 10px;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
     }
     
-    header .subtitle {
-      color: var(--text-muted);
-      font-size: 0.9rem;
+    /* Search */
+    .search-box {
+      position: relative;
     }
     
-    /* Progress */
-    .progress-bar {
-      height: 6px;
-      background: var(--card-bg);
-      border-radius: 3px;
-      margin-bottom: 30px;
-      overflow: hidden;
+    .search-input {
+      width: 100%;
+      padding: 14px 20px 14px 50px;
+      border: none;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.15);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
     }
     
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      transition: width 0.3s ease;
+    .search-input::placeholder {
+      color: rgba(255,255,255,0.6);
     }
     
-    /* Cards */
-    .card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-    
-    /* Question */
-    .question-card {
-      display: none;
-    }
-    
-    .question-card.active {
-      display: block;
-    }
-    
-    .question-num {
-      color: var(--primary);
-      font-size: 0.85rem;
-      margin-bottom: 8px;
-    }
-    
-    .question-text {
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 24px;
-      line-height: 1.5;
     }
     
-    /* Options */
-    .options {
+    /* Section */
+    .section {
+      padding: 24px 0;
+    }
+    
+    .section-title {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .section-title .icon {
+      font-size: 1.3rem;
+    }
+    
+    .section-title .tag {
+      font-size: 0.7rem;
+      background: var(--accent);
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    
+    /* Grid */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
     
-    .option {
-      background: rgba(255,255,255,0.05);
-      border: 2px solid transparent;
+    @media (min-width: 640px) {
+      .quiz-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .quiz-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    /* Card */
+    .quiz-card {
+      background: var(--card-bg);
       border-radius: 12px;
-      padding: 16px 20px;
+      padding: 16px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: left;
-      color: var(--text);
-      font-size: 1rem;
+      transition: all 0.2s;
+      border: 1px solid transparent;
     }
     
-    .option:hover {
-      background: rgba(102, 126, 234, 0.1);
+    .quiz-card:hover {
+      background: var(--card-bg-hover);
       border-color: var(--primary);
+      transform: translateY(-2px);
     }
     
-    .option.selected {
-      background: rgba(102, 126, 234, 0.2);
-      border-color: var(--primary);
-    }
-    
-    /* Result */
-    .result-card {
-      display: none;
-      text-align: center;
-    }
-    
-    .result-card.active {
-      display: block;
-    }
-    
-    .result-type {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-    
-    .result-type.type-A { color: var(--type-a); }
-    .result-type.type-B { color: var(--type-b); }
-    .result-type.type-C { color: var(--type-c); }
-    .result-type.type-D { color: var(--type-d); }
-    
-    .result-desc {
-      color: var(--text-muted);
-      margin: 20px 0;
-      line-height: 1.8;
-    }
-    
-    .result-traits {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    
-    .trait-tag {
-      background: rgba(255,255,255,0.1);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-    }
-    
-    /* Buttons */
-    .btn {
+    .quiz-card .cover {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      padding: 14px 32px;
-      border-radius: 30px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    
-    .btn:hover {
-      transform: scale(1.02);
-    }
-    
-    .btn-outline {
-      background: transparent;
-      border: 2px solid var(--primary);
-      margin: 10px;
-    }
-    
-    /* Share */
-    .share-section {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .share-text {
-      color: var(--text-muted);
-      margin-bottom: 15px;
-    }
-    
-    /* Ad placeholder */
-    .ad-section {
-      margin: 20px 0;
-      min-height: 100px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .quiz-card .title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .quiz-card .meta {
+      font-size: 0.7rem;
       color: var(--text-muted);
+      margin-top: 6px;
+    }
+    
+    .quiz-card .tag-hot {
+      background: #e94560;
+      color: white;
+      font-size: 0.6rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    
+    .quiz-card .tag-new {
+      background: #10b981;
+      color: white;
+      font-size: 0.6rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    
+    /* Horizontal scroll */
+    .quiz-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .quiz-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .quiz-scroll .quiz-card {
+      min-width: 140px;
+      flex-shrink: 0;
     }
     
     /* Footer */
@@ -227,173 +206,158 @@
       text-align: center;
       padding: 30px 0;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
     
     footer a {
       color: var(--primary);
       text-decoration: none;
     }
+    
+    /* Ad */
+    .ad-placeholder {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      color: var(--text-muted);
+      margin: 16px 0;
+      font-size: 0.8rem;
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
+  <header>
+    <div class="container">
+      <h1>🧠 心理测试大全</h1>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="搜索测试..." oninput="searchQuiz(this.value)">
+      </div>
+    </div>
+  </header>
+  
   <div class="container">
-    <header>
-      <h1 id="quizTitle">心理人格测试</h1>
-      <p class="subtitle" id="quizSubtitle">基于荣格人格理论</p>
-    </header>
-    
     <!-- Ad -->
-    <div class="ad-section">
-      Advertisement
-    </div>
+    <div class="ad-placeholder">Advertisement</div>
     
-    <!-- Progress -->
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress" style="width: 0%"></div>
-    </div>
+    <!-- Trending -->
+    <section class="section" id="trending">
+      <h2 class="section-title"><span class="icon">🔥</span> 最新最热 <span class="tag">热点</span></h2>
+      <div class="quiz-scroll" id="trendingList"></div>
+    </section>
     
-    <!-- Questions -->
-    <div id="questions"></div>
+    <!-- Classic -->
+    <section class="section" id="classic">
+      <h2 class="section-title"><span class="icon">⭐</span> 最经典测试</h2>
+      <div class="quiz-grid" id="classicList"></div>
+    </section>
     
-    <!-- Result -->
-    <div class="card result-card" id="result">
-      <div class="result-type" id="resultType"></div>
-      <div class="result-traits" id="resultTraits"></div>
-      <p class="result-desc" id="resultDesc"></p>
-      
-      <!-- Ad before share -->
-      <div class="ad-section">
-        Advertisement
-      </div>
-      
-      <button class="btn" onclick="retest()">再测一次</button>
-      
-      <div class="share-section">
-        <p class="share-text">分享给朋友一起测</p>
-        <button class="btn btn-outline" onclick="shareResult()">分享结果</button>
-      </div>
-    </div>
+    <!-- Personalized -->
+    <section class="section" id="recommended">
+      <h2 class="section-title"><span class="icon">💡</span> 最适合你的</h2>
+      <div class="quiz-grid" id="recommendedList"></div>
+    </section>
+    
+    <!-- All -->
+    <section class="section" id="all">
+      <h2 class="section-title"><span class="icon">📚</span> 全部测试</h2>
+      <div class="quiz-grid" id="allList"></div>
+    </section>
     
     <footer>
       <p>基于荣格人格理论 · 大五人格模型</p>
+      <p>© 2026 Psych Quiz</p>
     </footer>
   </div>
   
-  <script src="js/quiz-core.js"></script>
   <script>
-    let currentTest = null;
-    let answers = [];
-    let currentQ = 0;
-    
-    // 初始化测试
-    function initTest() {
-      currentTest = ThemeSystem.generateTest('default');
-      answers = [];
-      currentQ = 0;
+    // 测试数据 - 后面可以从后端获取
+    const quizzes = [
+      // Trending - 热点
+      { id: 'squid-game', title: '《鱿鱼游戏》你是哪个角色？', cover: '🎭', category: 'trending', tags: ['hot'] },
+      { id: 'mbti-2025', title: '2025年最新MBTI性格测试', cover: '✨', category: 'trending', tags: ['new'] },
+      { id: 'harry-potter', title: '哈利波特分院帽测试', cover: '⚡', category: 'trending', tags: ['hot'] },
+      { id: ' Genshin', title: '原神角色性格测试', cover: '🗡️', category: 'trending', tags: ['new'] },
+      { id: 'friend', title: '你在朋友眼里是什么样的人？', cover: '👥', category: 'trending', tags: [] },
+      { id: 'stress', title: '压力来源心理测试', cover: '🧘', category: 'trending', tags: [] },
       
-      document.getElementById('quizTitle').textContent = currentTest.theme.title;
-      document.getElementById('quizSubtitle').textContent = currentTest.theme.subtitle;
+      // Classic
+      { id: 'personality', title: '荣格人格类型测试', cover: '🧠', category: 'classic' },
+      { id: 'big-five', title: '大五人格深度分析', cover: '📊', category: 'classic' },
+      { id: 'emotion', title: '情绪管理能力测试', cover: '💭', category: 'classic' },
+      { id: 'love', title: '爱情性格匹配度', cover: '💕', category: 'classic' },
       
-      renderQuestions();
-      showQuestion(0);
-      document.getElementById('result').classList.remove('active');
-    }
+      // Recommended
+      { id: 'work-style', title: '职场性格分析', cover: '💼', category: 'recommended' },
+      { id: 'social', title: '社交能力评估', cover: '🤝', category: 'recommended' },
+      { id: 'self', title: '自我认知测试', cover: '🔮', category: 'recommended' },
+      { id: 'growth', title: '个人成长潜力', cover: '🌱', category: 'recommended' },
+    ];
     
-    // 渲染题目
-    function renderQuestions() {
-      const container = document.getElementById('questions');
-      container.innerHTML = currentTest.questions.map((q, i) => `
-        <div class="card question-card" data-index="${i}">
-          <div class="question-num">问题 ${i+1} / ${currentTest.questions.length}</div>
-          <div class="question-text">${q.text}</div>
-          <div class="options">
-            ${q.options.map((opt, j) => `
-              <button class="option" data-type="${opt.type}" data-q="${i}">${opt.text}</button>
-            `).join('')}
-          </div>
+    // 渲染卡片
+    function renderCard(quiz) {
+      const tags = quiz.tags ? quiz.tags.map(t => 
+        t === 'hot' ? '<span class="tag-hot">热门</span>' : 
+        t === 'new' ? '<span class="tag-new">NEW</span>' : ''
+      ).join('') : '';
+      
+      return `
+        <div class="quiz-card" onclick="playQuiz('${quiz.id}', '${quiz.title}')">
+          <div class="cover">${quiz.cover}</div>
+          <div class="title">${tags}${quiz.title}</div>
+          <div class="meta">${quiz.category === 'trending' ? '10000+ 测试' : '5000+ 测试'}</div>
         </div>
-      `).join('');
-      
-      // 绑定点击事件
-      document.querySelectorAll('.option').forEach(btn => {
-        btn.addEventListener('click', () => selectOption(btn));
-      });
+      `;
     }
     
-    // 显示题目
-    function showQuestion(index) {
-      document.querySelectorAll('.question-card').forEach((card, i) => {
-        card.classList.toggle('active', i === index);
-      });
+    // 初始化
+    function init() {
+      // 热点
+      const trending = quizzes.filter(q => q.category === 'trending');
+      document.getElementById('trendingList').innerHTML = trending.map(renderCard).join('');
       
-      const progress = ((index) / currentTest.questions.length) * 100;
-      document.getElementById('progress').style.width = progress + '%';
+      // 经典
+      const classic = quizzes.filter(q => q.category === 'classic');
+      document.getElementById('classicList').innerHTML = classic.map(renderCard).join('');
+      
+      // 推荐
+      const recommended = quizzes.filter(q => q.category === 'recommended');
+      document.getElementById('recommendedList').innerHTML = recommended.map(renderCard).join('');
+      
+      // 全部
+      document.getElementById('allList').innerHTML = quizzes.map(renderCard).join('');
     }
     
-    // 选择选项
-    function selectOption(btn) {
-      const qIndex = parseInt(btn.dataset.q);
-      const type = btn.dataset.type;
+    // 搜索
+    function searchQuiz(keyword) {
+      keyword = keyword.toLowerCase();
+      const filtered = quizzes.filter(q => 
+        q.title.toLowerCase().includes(keyword)
+      );
       
-      // 记录答案
-      answers[qIndex] = type;
-      
-      // 视觉反馈
-      const siblings = btn.parentElement.querySelectorAll('.option');
-      siblings.forEach(s => s.classList.remove('selected'));
-      btn.classList.add('selected');
-      
-      // 下一题或显示结果
-      setTimeout(() => {
-        if (qIndex < currentTest.questions.length - 1) {
-          showQuestion(qIndex + 1);
-        } else {
-          showResult();
-        }
-      }, 300);
-    }
-    
-    // 显示结果
-    function showResult() {
-      const result = QuizSystem.calculateResult(answers);
-      const typeKey = Object.keys(QuizSystem.types).find(k => QuizSystem.types[k] === result);
-      const themeResult = currentTest.theme.results[typeKey];
-      
-      document.getElementById('resultType').textContent = themeResult.title;
-      document.getElementById('resultType').className = 'result-type type-' + typeKey;
-      document.getElementById('resultDesc').textContent = themeResult.desc;
-      
-      document.getElementById('resultTraits').innerHTML = result.traits.map(t => 
-        `<span class="trait-tag">${t}</span>`
-      ).join('');
-      
-      document.getElementById('progress').style.width = '100%';
-      document.getElementById('questions').style.display = 'none';
-      document.getElementById('result').classList.add('active');
-    }
-    
-    // 再测一次
-    function retest() {
-      document.getElementById('questions').style.display = 'block';
-      initTest();
-    }
-    
-    // 分享
-    function shareResult() {
-      const resultType = document.getElementById('resultType').textContent;
-      const shareText = `我是${resultType}！测测你是什么性格类型：${window.location.href}`;
-      
-      if (navigator.share) {
-        navigator.share({ title: '心理测试', text: shareText });
+      if (keyword) {
+        document.getElementById('allList').innerHTML = filtered.map(renderCard).join('');
+        document.getElementById('all').scrollIntoView({ behavior: 'smooth' });
       } else {
-        navigator.clipboard.writeText(shareText);
-        alert('链接已复制！');
+        document.getElementById('allList').innerHTML = quizzes.map(renderCard).join('');
       }
     }
     
-    // 启动
-    initTest();
+    // 开始测试
+    function playQuiz(id, title) {
+      // 跳转到测试页面
+      window.location.href = `quiz.html?id=${id}`;
+    }
+    
+    init();
   </script>
 </body>
 </html>
