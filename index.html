@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>心理人格测试 - Which Character Are You?</title>
+  <meta name="description" content="基于荣格人格理论的免费心理测试">
+  
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_UNIT" crossorigin="anonymous"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #667eea;
+      --primary-dark: #5568d3;
+      --secondary: #764ba2;
+      --bg: #0f0f23;
+      --card-bg: #1a1a2e;
+      --text: #ffffff;
+      --text-muted: #a0a0b0;
+      --success: #10b981;
+      --type-a: #4a90d9;
+      --type-b: #9b59b6;
+      --type-c: #e74c3c;
+      --type-d: #f39c12;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Header */
+    header {
+      text-align: center;
+      padding: 30px 0;
+    }
+    
+    header h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    
+    header .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    /* Progress */
+    .progress-bar {
+      height: 6px;
+      background: var(--card-bg);
+      border-radius: 3px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    /* Question */
+    .question-card {
+      display: none;
+    }
+    
+    .question-card.active {
+      display: block;
+    }
+    
+    .question-num {
+      color: var(--primary);
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+    
+    .question-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    
+    /* Options */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    
+    .option:hover {
+      background: rgba(102, 126, 234, 0.1);
+      border-color: var(--primary);
+    }
+    
+    .option.selected {
+      background: rgba(102, 126, 234, 0.2);
+      border-color: var(--primary);
+    }
+    
+    /* Result */
+    .result-card {
+      display: none;
+      text-align: center;
+    }
+    
+    .result-card.active {
+      display: block;
+    }
+    
+    .result-type {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .result-type.type-A { color: var(--type-a); }
+    .result-type.type-B { color: var(--type-b); }
+    .result-type.type-C { color: var(--type-c); }
+    .result-type.type-D { color: var(--type-d); }
+    
+    .result-desc {
+      color: var(--text-muted);
+      margin: 20px 0;
+      line-height: 1.8;
+    }
+    
+    .result-traits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .trait-tag {
+      background: rgba(255,255,255,0.1);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+    
+    /* Buttons */
+    .btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .btn:hover {
+      transform: scale(1.02);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      margin: 10px;
+    }
+    
+    /* Share */
+    .share-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .share-text {
+      color: var(--text-muted);
+      margin-bottom: 15px;
+    }
+    
+    /* Ad placeholder */
+    .ad-section {
+      margin: 20px 0;
+      min-height: 100px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 id="quizTitle">心理人格测试</h1>
+      <p class="subtitle" id="quizSubtitle">基于荣格人格理论</p>
+    </header>
+    
+    <!-- Ad -->
+    <div class="ad-section">
+      Advertisement
+    </div>
+    
+    <!-- Progress -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress" style="width: 0%"></div>
+    </div>
+    
+    <!-- Questions -->
+    <div id="questions"></div>
+    
+    <!-- Result -->
+    <div class="card result-card" id="result">
+      <div class="result-type" id="resultType"></div>
+      <div class="result-traits" id="resultTraits"></div>
+      <p class="result-desc" id="resultDesc"></p>
+      
+      <!-- Ad before share -->
+      <div class="ad-section">
+        Advertisement
+      </div>
+      
+      <button class="btn" onclick="retest()">再测一次</button>
+      
+      <div class="share-section">
+        <p class="share-text">分享给朋友一起测</p>
+        <button class="btn btn-outline" onclick="shareResult()">分享结果</button>
+      </div>
+    </div>
+    
+    <footer>
+      <p>基于荣格人格理论 · 大五人格模型</p>
+    </footer>
+  </div>
+  
+  <script src="js/quiz-core.js"></script>
+  <script>
+    let currentTest = null;
+    let answers = [];
+    let currentQ = 0;
+    
+    // 初始化测试
+    function initTest() {
+      currentTest = ThemeSystem.generateTest('default');
+      answers = [];
+      currentQ = 0;
+      
+      document.getElementById('quizTitle').textContent = currentTest.theme.title;
+      document.getElementById('quizSubtitle').textContent = currentTest.theme.subtitle;
+      
+      renderQuestions();
+      showQuestion(0);
+      document.getElementById('result').classList.remove('active');
+    }
+    
+    // 渲染题目
+    function renderQuestions() {
+      const container = document.getElementById('questions');
+      container.innerHTML = currentTest.questions.map((q, i) => `
+        <div class="card question-card" data-index="${i}">
+          <div class="question-num">问题 ${i+1} / ${currentTest.questions.length}</div>
+          <div class="question-text">${q.text}</div>
+          <div class="options">
+            ${q.options.map((opt, j) => `
+              <button class="option" data-type="${opt.type}" data-q="${i}">${opt.text}</button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+      
+      // 绑定点击事件
+      document.querySelectorAll('.option').forEach(btn => {
+        btn.addEventListener('click', () => selectOption(btn));
+      });
+    }
+    
+    // 显示题目
+    function showQuestion(index) {
+      document.querySelectorAll('.question-card').forEach((card, i) => {
+        card.classList.toggle('active', i === index);
+      });
+      
+      const progress = ((index) / currentTest.questions.length) * 100;
+      document.getElementById('progress').style.width = progress + '%';
+    }
+    
+    // 选择选项
+    function selectOption(btn) {
+      const qIndex = parseInt(btn.dataset.q);
+      const type = btn.dataset.type;
+      
+      // 记录答案
+      answers[qIndex] = type;
+      
+      // 视觉反馈
+      const siblings = btn.parentElement.querySelectorAll('.option');
+      siblings.forEach(s => s.classList.remove('selected'));
+      btn.classList.add('selected');
+      
+      // 下一题或显示结果
+      setTimeout(() => {
+        if (qIndex < currentTest.questions.length - 1) {
+          showQuestion(qIndex + 1);
+        } else {
+          showResult();
+        }
+      }, 300);
+    }
+    
+    // 显示结果
+    function showResult() {
+      const result = QuizSystem.calculateResult(answers);
+      const typeKey = Object.keys(QuizSystem.types).find(k => QuizSystem.types[k] === result);
+      const themeResult = currentTest.theme.results[typeKey];
+      
+      document.getElementById('resultType').textContent = themeResult.title;
+      document.getElementById('resultType').className = 'result-type type-' + typeKey;
+      document.getElementById('resultDesc').textContent = themeResult.desc;
+      
+      document.getElementById('resultTraits').innerHTML = result.traits.map(t => 
+        `<span class="trait-tag">${t}</span>`
+      ).join('');
+      
+      document.getElementById('progress').style.width = '100%';
+      document.getElementById('questions').style.display = 'none';
+      document.getElementById('result').classList.add('active');
+    }
+    
+    // 再测一次
+    function retest() {
+      document.getElementById('questions').style.display = 'block';
+      initTest();
+    }
+    
+    // 分享
+    function shareResult() {
+      const resultType = document.getElementById('resultType').textContent;
+      const shareText = `我是${resultType}！测测你是什么性格类型：${window.location.href}`;
+      
+      if (navigator.share) {
+        navigator.share({ title: '心理测试', text: shareText });
+      } else {
+        navigator.clipboard.writeText(shareText);
+        alert('链接已复制！');
+      }
+    }
+    
+    // 启动
+    initTest();
+  </script>
+</body>
+</html>
